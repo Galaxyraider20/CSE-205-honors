@@ -18,6 +18,11 @@ public class Player {
         hand = new Hand();
     }
 
+    public String name()
+    {
+        return name;
+    }
+
 
     public void deal(int no, Deck deck)
     {

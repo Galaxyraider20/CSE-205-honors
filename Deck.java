@@ -62,7 +62,6 @@ public class Deck {
         while(no<100)
         {
             no = rand.nextInt(1000);
-            System.out.println("no "+ no);
         }
 
 

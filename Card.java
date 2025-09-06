@@ -56,15 +56,19 @@ public class Card {
 
                 case 1:
                     value = "A";
+                    intvalue = -99;
                     break;
                 case 11:
                     value = "J";
+                    intvalue = 10;
                     break;
                 case 12:
                     value = "Q";
+                    intvalue = 10;
                     break;
                 case 13:
                     value = "K";
+                    intvalue = 10;
                     break;
 
             } 

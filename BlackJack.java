@@ -19,6 +19,7 @@ public class BlackJack {
         takeNamesAndDistribute(deck,Players,Status);
         System.out.println("Remaining deck - ");
         deck.displayDeck();
+        System.out.println("No of Cards remaining in deck ->"+deck.top);
 
 
         //deck.displayDeck();
@@ -27,7 +28,8 @@ public class BlackJack {
         boolean bust = false;
         while(!bust)
         {
-            bust = playRound(Players,Status);
+            playRound(Players,Status,deck,reader);
+            bust = !check(Status);
         }
     }   
 
@@ -96,7 +98,7 @@ public class BlackJack {
                 Players.add(new Player(name,true));
                 Players.get(i).deal(2,deck,1);
                 System.out.println(name+"'s Cards");
-                Players.get(i).hand.displayHand(true);
+                Players.get(i).hand.displayHand(false);
                 System.out.println();
 
             }
@@ -109,11 +111,13 @@ public class BlackJack {
                     name = reader.readLine();
                     if(name.isEmpty())
                         name = "Player " + i;
-                    if(first)
-                    {
-                        i--;
-                        first = false;
-                    }
+                    
+                    Players.add(new Player(name));
+                    Players.get(i).deal(2,deck);
+                    System.out.println( name +"'s Cards");
+                    Players.get(i).hand.displayHand(false);
+
+
                 }
                 else    
                 {
@@ -121,12 +125,12 @@ public class BlackJack {
                     name = reader.readLine();
                     if(name.isEmpty())
                         name = "Player " + (i+1);
+                
+                    Players.add(new Player(name));
+                    Players.get(i+1).deal(2,deck);
+                    System.out.println( name +"'s Cards");
+                    Players.get(i+1).hand.displayHand(false);
                 }
-
-                Players.add(new Player(name));
-                Players.get(i).deal(2,deck);
-                System.out.println( name +"'s Cards");
-                Players.get(i).hand.displayHand(false);
 
             }
         }  
@@ -139,26 +143,68 @@ public class BlackJack {
         int i;
         for(i=0;i<Status.size();i++)
         {
-            
+            if(Status.get(i)==1)
+                return true;
         }
         return false;
     }
 
+    public int calculateHandTotal(Hand hand)
+    {
+        int i;
+        int sum = 0;
+        for(i=0;i<hand.hand.size();i++)
+        {
+            sum += hand.hand.get(i).intvalue();
+        }
+        return sum;
+    }
 
-    public boolean playRound(ArrayList<Player> Players, ArrayList<Integer> Status)
+    public boolean playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
     {
         //asking players who are still playing if they want to stand or hit
-
+        boolean decision = true;
         //setting everyone's initial status to in or 1
         int i;
-        for(i=0;i<Status.size();i++)
+        for(i=0;i<Players.size();i++)
         {
-            Status.set(i,1);
+            Status.add(1);
         }
-
+        System.out.println(Status);
+        //are all players out? 
+        //no-> enter loop
+        //yes-> skip loop
         while(check(Status))
         {
-            
+            //Run the loop for each player
+            for(i=0;i<Status.size();i++)
+            {
+                //check if the player is in
+                if(Status.get(i)==1)
+                {
+                    decision = true;
+                    //runs as long as the player is in
+                    while(decision)
+                    {
+                        System.out.println(Players.get(i).name()+", Stand or Hit? (you hand has a value of "+ calculateHandTotal(Players.get(i).hand)+" )");
+                        decision = Boolean.parseBoolean(reader.readLine());
+                        if(decision)
+                        {
+                            Players.get(i).deal(1,deck);
+                            System.out.println("You got "+Players.get(i).hand.hand.get(Players.get(i).hand.hand.size()-1).toString());
+                            if(calculateHandTotal(Players.get(i).hand) > 21)
+                            {
+                                System.out.println("Sorry " + Players.get(i).name() + ", it's a bust - " + calculateHandTotal(Players.get(i).hand));
+                                Status.set(i, 0);
+                                break;
+                            }
+                        }
+                        else{
+                            Status.set(i, 0);
+                        }
+                    }
+                }
+            }
         }
         return true;
 
