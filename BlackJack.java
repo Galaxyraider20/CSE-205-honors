@@ -25,12 +25,9 @@ public class BlackJack {
         //deck.displayDeck();
         //Players have been dealt cards and setup is Complete!
 
-        boolean bust = false;
-        while(!bust)
-        {
-            playRound(Players,Status,deck,reader);
-            bust = !check(Status);
-        }
+
+        playRound(Players,Status,deck,reader);
+
     }   
 
     public void takeNamesAndDistribute(Deck deck, ArrayList<Player> Players, ArrayList<Integer> Status) throws IOException
@@ -160,8 +157,9 @@ public class BlackJack {
         return sum;
     }
 
-    public boolean playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
+    public void playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
     {
+        ArrayList<Integer> Val = new ArrayList<Integer>();
         //asking players who are still playing if they want to stand or hit
         boolean decision = true;
         //setting everyone's initial status to in or 1
@@ -206,8 +204,6 @@ public class BlackJack {
                 }
             }
         }
-        return true;
-
     }
 
 }
