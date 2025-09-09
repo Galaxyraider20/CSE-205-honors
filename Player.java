@@ -3,6 +3,7 @@ public class Player {
     public Hand hand;
     private int balance;
     private boolean isDealer;
+    private int atStake;
 
     public Player(String nam, boolean dealer)
     {
@@ -23,7 +24,17 @@ public class Player {
         return name;
     }
 
-
+    public void changeAtStake(int money,boolean reset)
+    {
+        if(reset)
+            atStake = money;
+        else    
+            atStake += money; 
+    }
+    public int getBalance()
+    {
+        return balance;
+    }
     public void deal(int no, Deck deck)
     {
         while(no > 0)
@@ -56,6 +67,11 @@ public class Player {
                 hand.hand.get(no).isFaceUp = true;
             }
         }
+    }
+
+    public void changeMoney(int money)
+    {
+        balance += money; 
     }
 
     /*

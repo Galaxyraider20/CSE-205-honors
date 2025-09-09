@@ -157,6 +157,26 @@ public class BlackJack {
         return sum;
     }
 
+    public ArrayList<Integer> getWagers(ArrayList<Player> Players)throws IOException
+    {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        ArrayList<Integer> wagers = new ArrayList<Integer>();
+        for(Player player: Players)
+        {
+            System.out.println("How much do you want to bet?");
+            int bet = Integer.parseInt(reader.readLine());
+            if(player.getBalance()>=bet)
+                player.changeMoney(bet);
+            else
+            {
+                System.out.println("You're broke lol");
+                bet = 0;
+            }
+            wagers.add(bet);
+        }
+        return wagers;
+    }
+
     public void playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
     {
         ArrayList<Integer> Val = new ArrayList<Integer>();
@@ -184,6 +204,7 @@ public class BlackJack {
                     //runs as long as the player is in
                     while(decision)
                     {
+                        ArrayList<Integer> Wagers = getWagers(Players);
                         System.out.println(Players.get(i).name()+", Stand or Hit? (you hand has a value of "+ calculateHandTotal(Players.get(i).hand)+" )");
                         decision = Boolean.parseBoolean(reader.readLine());
                         if(decision)
