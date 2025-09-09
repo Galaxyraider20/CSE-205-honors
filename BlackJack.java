@@ -166,7 +166,9 @@ public class BlackJack {
             System.out.println("How much do you want to bet?");
             int bet = Integer.parseInt(reader.readLine());
             if(player.getBalance()>=bet)
-                player.changeMoney(bet);
+            {
+                player.changeAtStake(bet, false);
+            }
             else
             {
                 System.out.println("You're broke lol");
@@ -177,11 +179,39 @@ public class BlackJack {
         return wagers;
     }
 
+    public boolean stillIn(Player player)throws IOException
+    {
+        boolean stillIn = true;
+        boolean cont = true;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        while(cont)
+        {
+            System.out.println(player.name()+", Stand or Hit? (you hand has a value of "+ calculateHandTotal(player.hand)+" )");
+            String answer = reader.readLine();
+            if(answer.equals("yes")||answer.equals("ye")||answer.equals("y"))
+                {
+                    stillIn = true;
+                    cont = false;
+                }
+                else if(answer.equals("no")||answer.equals("nah")||answer.equals("n"))
+                {
+                    stillIn = false;
+                    cont = false;
+                }
+                else
+                {
+                    System.out.println("Please reply with yes or no");
+                }
+        }
+        return stillIn;
+    }
+   
     public void playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
     {
-        ArrayList<Integer> Val = new ArrayList<Integer>();
+        ArrayList<Integer> Val = new ArrayList<Integer>();//Hand Value of all the players
         //asking players who are still playing if they want to stand or hit
         boolean decision = true;
+        String answer = "";
         //setting everyone's initial status to in or 1
         int i;
         for(i=0;i<Players.size();i++)
@@ -189,6 +219,8 @@ public class BlackJack {
             Status.add(1);
         }
         System.out.println(Status);
+        ArrayList<Integer> Wagers = getWagers(Players); // bet placed 
+
         //are all players out? 
         //no-> enter loop
         //yes-> skip loop
@@ -204,9 +236,7 @@ public class BlackJack {
                     //runs as long as the player is in
                     while(decision)
                     {
-                        ArrayList<Integer> Wagers = getWagers(Players);
-                        System.out.println(Players.get(i).name()+", Stand or Hit? (you hand has a value of "+ calculateHandTotal(Players.get(i).hand)+" )");
-                        decision = Boolean.parseBoolean(reader.readLine());
+                        decision = stillIn(Players.get(i));
                         if(decision)
                         {
                             Players.get(i).deal(1,deck);
@@ -215,6 +245,7 @@ public class BlackJack {
                             {
                                 System.out.println("Sorry " + Players.get(i).name() + ", it's a bust - " + calculateHandTotal(Players.get(i).hand));
                                 Status.set(i, 0);
+                                Players.get(i).changeMoney(-1*Wagers.get(i));
                                 break;
                             }
                         }
@@ -225,6 +256,8 @@ public class BlackJack {
                 }
             }
         }
+        System.out.println("Game ended, adjusting money...");
+        
     }
 
 }
