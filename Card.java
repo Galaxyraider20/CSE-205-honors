@@ -56,7 +56,7 @@ public class Card {
 
                 case 1:
                     value = "A";
-                    intvalue = -99;
+                    intvalue = 1;
                     break;
                 case 11:
                     value = "J";

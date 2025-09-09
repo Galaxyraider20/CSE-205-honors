@@ -95,7 +95,7 @@ public class BlackJack {
                 Players.add(new Player(name,true));
                 Players.get(i).deal(2,deck,1);
                 System.out.println(name+"'s Cards");
-                Players.get(i).hand.displayHand(false);
+                Players.get(i).hand.displayHand(true);
                 System.out.println();
 
             }
@@ -112,7 +112,7 @@ public class BlackJack {
                     Players.add(new Player(name));
                     Players.get(i).deal(2,deck);
                     System.out.println( name +"'s Cards");
-                    Players.get(i).hand.displayHand(false);
+                    Players.get(i).hand.displayHand(true);
 
 
                 }
@@ -126,7 +126,7 @@ public class BlackJack {
                     Players.add(new Player(name));
                     Players.get(i+1).deal(2,deck);
                     System.out.println( name +"'s Cards");
-                    Players.get(i+1).hand.displayHand(false);
+                    Players.get(i+1).hand.displayHand(true);
                 }
 
             }
