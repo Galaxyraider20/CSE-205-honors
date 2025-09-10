@@ -275,25 +275,29 @@ public class BlackJack {
         System.out.println(Status);
         //Placing Bets
         ArrayList<Integer> Wagers = getWagers(Players,Status); // bet placed 
-        Object[] ret = new Object[2];
+        int pool = 0;
+        for(i=0;i<Wagers.size();i++)
+        {
+            pool += Wagers.get(i);
+        }
+        Integer Pool = new Integer(pool);
+        Object[] ret = new Object[3];
         ret[0] = Wagers;
         ret[1] = Val;
+        ret[2] = Pool;
         return ret;
+
 
     }
     
     public void playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
     {
-        int pool= 0;
         int i;
         boolean decision;
         Object[] res = setup(Players, Status, deck, reader); // returns object array with Wagers array at pos 0 and Hand Value at pos 1
         ArrayList<Integer> Wagers = (ArrayList<Integer>)res[0]; //total money bet on this round
         int Val[] = (int[])res[1];
-        for(i=0;i<Wagers.size();i++)
-        {
-            pool += Wagers.get(i);
-        }
+        int pool = (int)res[2];
         
         //are all players out? 
         //no-> enter loop
