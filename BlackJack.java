@@ -19,7 +19,7 @@ public class BlackJack {
         takeNamesAndDistribute(deck,Players,Status);
         System.out.println("Remaining deck - ");
         deck.displayDeck();
-        System.out.println("No of Cards remaining in deck ->"+deck.top);
+        System.out.println("No of Cards remaining in deck ->"+(deck.top+1));
 
 
         //deck.displayDeck();
@@ -95,7 +95,7 @@ public class BlackJack {
                 Players.add(new Player(name,true));
                 Players.get(i).deal(2,deck,1);
                 System.out.println(name+"'s Cards");
-                Players.get(i).hand.displayHand(true);
+                Players.get(i).hand.displayHand(false);
                 System.out.println();
 
             }
@@ -112,7 +112,7 @@ public class BlackJack {
                     Players.add(new Player(name));
                     Players.get(i).deal(2,deck);
                     System.out.println( name +"'s Cards");
-                    Players.get(i).hand.displayHand(true);
+                    Players.get(i).hand.displayHand(false);
 
 
                 }
@@ -126,7 +126,7 @@ public class BlackJack {
                     Players.add(new Player(name));
                     Players.get(i+1).deal(2,deck);
                     System.out.println( name +"'s Cards");
-                    Players.get(i+1).hand.displayHand(true);
+                    Players.get(i+1).hand.displayHand(false);
                 }
 
             }
@@ -163,11 +163,12 @@ public class BlackJack {
         ArrayList<Integer> wagers = new ArrayList<Integer>();
         for(Player player: Players)
         {
-            System.out.println("How much do you want to bet?");
+            System.out.println(player.name()+", How much do you want to bet?");
             int bet = Integer.parseInt(reader.readLine());
             if(player.getBalance()>=bet)
             {
                 player.changeAtStake(bet, false);
+                player.changeMoney(-1*bet,false);
             }
             else
             {
@@ -176,6 +177,11 @@ public class BlackJack {
             }
             wagers.add(bet);
         }
+        for(int i=0;i<Players.size();i++)
+        {
+            System.out.println(Players.get(i).name()+"' s Balance : "+Players.get(i).getBalance());
+        }
+        
         return wagers;
     }
 
@@ -188,12 +194,12 @@ public class BlackJack {
         {
             System.out.println(player.name()+", Stand or Hit? (you hand has a value of "+ calculateHandTotal(player.hand)+" )");
             String answer = reader.readLine();
-            if(answer.equals("yes")||answer.equals("ye")||answer.equals("y"))
+            if(answer.equals("yes")||answer.equals("ye")||answer.equals("y")||answer.equals("hit")||answer.equals("Hit"))
                 {
                     stillIn = true;
                     cont = false;
                 }
-                else if(answer.equals("no")||answer.equals("nah")||answer.equals("n"))
+                else if(answer.equals("no")||answer.equals("nah")||answer.equals("n")||answer.equals("stand")||answer.equals("Stand"))
                 {
                     stillIn = false;
                     cont = false;
@@ -208,19 +214,36 @@ public class BlackJack {
    
     public void playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
     {
-        ArrayList<Integer> Val = new ArrayList<Integer>();//Hand Value of all the players
+
+        //for testing purposes everyone gets 1000$
+        for(Player player:Players)
+        {
+            player.changeMoney(1000,true);
+        }
+
+        int[] Val = new int[Players.size()];//Hand Value of all the players
         //asking players who are still playing if they want to stand or hit
         boolean decision = true;
-        String answer = "";
         //setting everyone's initial status to in or 1
         int i;
         for(i=0;i<Players.size();i++)
         {
             Status.add(1);
         }
+        //calculating the initial hand totals and storing in Val, reseting atStake values
+        for(i=0;i<Players.size();i++)
+        {
+            Players.get(i).changeAtStake(0, true);
+            Val[i] = calculateHandTotal(Players.get(i).hand);
+        }
         System.out.println(Status);
+        //Placing Bets
         ArrayList<Integer> Wagers = getWagers(Players); // bet placed 
-
+        int pool=0; //total money bet on this round
+        for(i=0;i<Wagers.size();i++)
+        {
+            pool += Wagers.get(i);
+        }
         //are all players out? 
         //no-> enter loop
         //yes-> skip loop
@@ -241,11 +264,12 @@ public class BlackJack {
                         {
                             Players.get(i).deal(1,deck);
                             System.out.println("You got "+Players.get(i).hand.hand.get(Players.get(i).hand.hand.size()-1).toString());
+                            Val[i] += Players.get(i).hand.hand.get(Players.get(i).hand.hand.size()-1).intvalue();
                             if(calculateHandTotal(Players.get(i).hand) > 21)
                             {
                                 System.out.println("Sorry " + Players.get(i).name() + ", it's a bust - " + calculateHandTotal(Players.get(i).hand));
                                 Status.set(i, 0);
-                                Players.get(i).changeMoney(-1*Wagers.get(i));
+                                Val[i] = 0;
                                 break;
                             }
                         }
@@ -256,8 +280,36 @@ public class BlackJack {
                 }
             }
         }
+        //checking who has the highest value and awarding money respectively
         System.out.println("Game ended, adjusting money...");
-        
+        int max = Val[0];
+        for(i=0;i<Val.length;i++)
+        {
+            if(Val[i]>max)
+                max = Val[i];
+        }
+        //getting the Winners
+        ArrayList<Player> Winners = new ArrayList<Player>();
+        for(i=0;i<Val.length;i++)
+        {
+            if(calculateHandTotal(Players.get(i).hand)==max)
+            {
+                Winners.add(Players.get(i));
+            }
+        }
+        //Distributing the Money
+
+        for(i=0;i<Winners.size();i++)
+        {
+            Winners.get(i).changeMoney((pool)/Winners.size(),false);
+        }
+
+        //Displaying Final Balances
+        for(i=0;i<Players.size();i++)
+        {
+            System.out.println(Players.get(i).name()+"' s Balance : "+Players.get(i).getBalance());
+        }
+
     }
 
 }

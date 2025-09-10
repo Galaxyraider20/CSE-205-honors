@@ -10,6 +10,7 @@ public class Player {
         name = nam;
         hand = new Hand();
         isDealer = dealer;
+        balance = 0;
 
     }
 
@@ -17,6 +18,7 @@ public class Player {
     {
         name = nam;
         hand = new Hand();
+        balance = 0;
     }
 
     public String name()
@@ -69,9 +71,12 @@ public class Player {
         }
     }
 
-    public void changeMoney(int money)
+    public void changeMoney(int money,boolean reset)
     {
-        balance += money; 
+        if(!reset)
+            balance += money;
+        else
+            balance = money;
     }
 
     /*
