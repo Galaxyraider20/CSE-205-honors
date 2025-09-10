@@ -251,9 +251,8 @@ public class BlackJack {
         printBalances(Players);
     }
 
-    public void playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
+    public Object[] setup (ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader)throws IOException
     {
-
         //for testing purposes everyone gets 1000$
         for(Player player:Players)
         {
@@ -261,8 +260,6 @@ public class BlackJack {
         }
 
         int[] Val = new int[Players.size()];//Hand Value of all the players
-        //asking players who are still playing if they want to stand or hit
-        boolean decision = true;
         //setting everyone's initial status to in or 1
         int i;
         for(i=0;i<Players.size();i++)
@@ -278,20 +275,35 @@ public class BlackJack {
         System.out.println(Status);
         //Placing Bets
         ArrayList<Integer> Wagers = getWagers(Players,Status); // bet placed 
-        int pool=0; //total money bet on this round
+        Object[] ret = new Object[2];
+        ret[0] = Wagers;
+        ret[1] = Val;
+        return ret;
+
+    }
+    
+    public void playRound(ArrayList<Player> Players, ArrayList<Integer> Status,Deck deck, BufferedReader reader) throws IOException
+    {
+        int pool= 0;
+        int i;
+        boolean decision;
+        Object[] res = setup(Players, Status, deck, reader); // returns object array with Wagers array at pos 0 and Hand Value at pos 1
+        ArrayList<Integer> Wagers = (ArrayList<Integer>)res[0]; //total money bet on this round
+        int Val[] = (int[])res[1];
         for(i=0;i<Wagers.size();i++)
         {
             pool += Wagers.get(i);
         }
+        
         //are all players out? 
         //no-> enter loop
-        //yes-> skip loop
+        //yes-> skip loop and adjust money
         while(check(Status))
         {
             //Run the loop for each player
             for(i=0;i<Status.size();i++)
             {
-                //check if the player is in
+                //check if the player can still play
                 if(Status.get(i)==1)
                 {
                     decision = true;
@@ -306,7 +318,7 @@ public class BlackJack {
                             Val[i] += Players.get(i).hand.hand.get(Players.get(i).hand.hand.size()-1).intvalue();
                             if(calculateHandTotal(Players.get(i).hand) > 21)
                             {
-                                System.out.println("Sorry " + Players.get(i).name() + ", it's a bust - " + calculateHandTotal(Players.get(i).hand));
+                                System.out.println("Sorry " + Players.get(i).name() + ", it's a bust - " + Val[i]);
                                 Status.set(i, 0);
                                 Val[i] = 0;
                                 break;
