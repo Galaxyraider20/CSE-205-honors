@@ -1,10 +1,9 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
 public class BlackJack {
 
+    
     public void start() throws IOException
     {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -28,6 +27,29 @@ public class BlackJack {
         playRound(Players,Status,deck,reader);
 
     }   
+
+    public ArrayList<Player> loadPlayers(ArrayList<Player> Players) throws FileNotFoundException
+    {
+        //loading the saved players and moneys
+        String filename = "players.txt";
+        File file = new File(filename);
+
+        try(Scanner sc = new Scanner(file))
+        {
+            while(sc.hasNext())
+            {
+                String parts[] = sc.nextLine().split(" ");
+                if(parts.length == 2)
+                {
+                    String name = parts[0];
+                    int money = Integer.parseInt(parts[1]);
+                    Players.add(new Player(name,money));
+                }
+            }
+        }
+
+        return Players;
+    }
 
     public void takeNamesAndDistribute(Deck deck, ArrayList<Player> Players, ArrayList<Integer> Status) throws IOException
     {
@@ -79,7 +101,11 @@ public class BlackJack {
             }
         }
 
-        
+
+
+        System.out.println("Players - "+);
+
+
         int i;
         String name;
         boolean first = true;
@@ -294,7 +320,7 @@ public class BlackJack {
     {
         int i;
         boolean decision;
-        Object[] res = setup(Players, Status, deck, reader); // returns object array with Wagers array at pos 0 and Hand Value at pos 1
+        Object[] res = setup(Players, Status, deck, reader); // returns object array with Wagers array at pos 0 and Hand Value at pos 1 and pool at pos 2
         ArrayList<Integer> Wagers = (ArrayList<Integer>)res[0]; //total money bet on this round
         int Val[] = (int[])res[1];
         int pool = (int)res[2];
@@ -337,7 +363,5 @@ public class BlackJack {
         }
         //checking who has the highest value and awarding money respectively
         adjustMoney(Val,Players,pool);
-
     }
-
 }

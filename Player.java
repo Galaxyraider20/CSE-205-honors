@@ -21,6 +21,21 @@ public class Player {
         balance = 0;
     }
 
+    public Player(String nam, boolean dealer,int money)
+    {
+        name = nam;
+        hand = new Hand();
+        isDealer = dealer;
+        balance = money;
+    }
+
+    public Player(String nam, int money)
+    {
+        name = nam;
+        hand = new Hand();
+        balance = money;
+    }
+
     public String name()
     {
         return name;
