@@ -18,6 +18,7 @@ cards/
     BetLedger.java        // optional: bets, pots, payouts
     PlayerSeat.java
     Events.java           // domain events (dealt, moved, settled)
+    GameController.java
   io/
     UI.java               // ask/print abstraction
     ConsoleUI.java
