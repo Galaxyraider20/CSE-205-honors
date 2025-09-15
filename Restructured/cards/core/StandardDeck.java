@@ -1,13 +1,16 @@
-package Restructured.cards;
+package Restructured.cards.core;
 
 import java.util.*;
 
 public class StandardDeck implements Deck
 {
     private final List<Card> cards = new ArrayList<>(); 
+    private final Shuffler shuffler;
 
-    public StandardDeck()
+    public StandardDeck(){this.shuffler = new RngShuffler();}
+    public StandardDeck(Shuffler shuffler)
     {
+        this.shuffler = shuffler;
         for(Suit suit: Suit.values())
         {
             for(Rank rank : Rank.values())
@@ -28,7 +31,7 @@ public class StandardDeck implements Deck
         return cards.remove(cards.size()-1);
     }
 
-    public void shuffle() {Collections.shuffle(cards, new Random());}
+    public void shuffle() {shuffler.shuffle(cards);}
 
     public List<Card> cards(){return Collections.unmodifiableList(cards);}
 
