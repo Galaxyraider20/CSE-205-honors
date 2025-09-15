@@ -1,0 +1,36 @@
+cards/
+  core/
+    Card.java         // immutable
+    Rank.java, Suit.java
+    Deck.java         // interface
+    StandardDeck.java // 52-card impl
+    Shoe.java         // 1..N decks
+    Shuffler.java     // interface
+    RngShuffler.java  // default impl
+    Hand.java         // generic holder of Cards
+    Ruleset.java      // marker/kv config
+  engine/
+    Game.java             // SPI for any card game
+    GameState.java        // immutable view of state
+    Move.java             // a player action
+    TurnOrder.java        // who acts next?
+    DealerPolicy.java     // auto-actions (e.g., BJ dealer hits to 17)
+    BetLedger.java        // optional: bets, pots, payouts
+    PlayerSeat.java
+    Events.java           // domain events (dealt, moved, settled)
+  io/
+    UI.java               // ask/print abstraction
+    ConsoleUI.java
+games/
+  blackjack/
+    BJGame.java
+    BJState.java
+    BJMove.java
+    BJRules.java
+    BJDealerPolicy.java
+    BJScoring.java
+  war/
+    WarGame.java
+    ...
+app/
+  Main.java               // wire UI + a game
