@@ -1,4 +1,4 @@
-package Restructured.cards;
+package Restructured.cards.core;
 
 import java.util.*;
 public interface Deck {
