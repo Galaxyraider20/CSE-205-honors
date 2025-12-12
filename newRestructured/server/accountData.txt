@@ -1,0 +1,34 @@
+{
+  "accounts": [
+    {
+      "id": 1,
+      "username": "Galaxy",
+      "password_hash": "XjPqERkOX4w6/KgFygc6phUIaX1eA0W/FQdXhiN+HuRU4xq2z9DjIOP3MC7/WhhAaaNglOUCKOwdRz35ik2Mig==",
+      "salt": "JvXmuKKtDcQZkQ2TgEBTNg==",
+      "created_at": "2025-11-07T22:27:53.384Z",
+      "is_admin": false,
+      "api_key": "dsjdsaodajsodas",
+      "balance": 10000
+    },
+    {
+      "id": 2,
+      "username": "Galaxy2",
+      "password_hash": "xgI+LA1eO55m/+MHV/9ohW/pXfXUlYD2wKgxNBdMNDE/WQyn2dy8+cLuZ2WmUVlLNv5s0g4KDKekpjFnHo6Dmw==",
+      "salt": "aphe8BlyMPMTcWpfNL0YJw==",
+      "created_at": "2025-11-07T22:28:11.429Z",
+      "is_admin": false,
+      "api_key": "dsjdsaodajsodas",
+      "balance": 10000
+    },
+    {
+      "id": 3,
+      "username": "Gala1raider",
+      "password_hash": "NMfr2LRCOxBA1LoVCZ2avrJBXMxCi0+gIZFnb45IytlzRE7Uz+qrYGMKcY7dwtnQx3brDvVlNVvN0z7UUzAkww==",
+      "salt": "pyCNrJ9Hhd8X1ZYOCn37pQ==",
+      "created_at": "2025-11-25T23:11:24.625Z",
+      "is_admin": false,
+      "api_key": "dsjdsaodajsodas",
+      "balance": 10000
+    }
+  ]
+}
