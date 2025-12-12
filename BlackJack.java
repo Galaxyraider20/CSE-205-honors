@@ -5,6 +5,13 @@ import java.util.ArrayList;
 
 public class BlackJack {
 
+    private final UI ui;
+
+    public BlackJack(UI ui)
+    {
+        this.ui = ui;
+    }
+
     public void start() throws IOException
     {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -17,10 +24,9 @@ public class BlackJack {
         deck.displayDeck();
         deck.shuffle();
         takeNamesAndDistribute(deck,Players,Status);
-        System.out.println("Remaining deck - ");
+        ui.println("Remaning deck - ");
         deck.displayDeck();
-        System.out.println("No of Cards remaining in deck ->"+(deck.top+1));
-
+        ui.println("No of Cards remaining in deck ->"+(deck.top+1));
 
         //deck.displayDeck();
         //Players have been dealt cards and setup is Complete!
@@ -39,45 +45,11 @@ public class BlackJack {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         //Getting Player Count
-        System.out.println("How many people are playing?");
-        int playerAmt = 0;
-        boolean cont = true;
-        while(cont)
-        {
-            try
-            {
-                playerAmt = Integer.parseInt(reader.readLine());
-                cont = false;
-            }
-            catch(NumberFormatException e)
-            {
-                System.out.println("Please enter a numeric value!");
-            }
-        }
+        int playerAmt = ui.askInt("How many people are playing?");
+        boolean cont;
         //checking if user wants a AI Dealer
-        System.out.println("Do you want an Robot Dealer?");
-        String AIDealer;
-        boolean humanDealer = false;
-        cont = true;
-        while(cont)
-        {
-            AIDealer = reader.readLine();
-            AIDealer = AIDealer.toLowerCase();
-            if(AIDealer.equals("yes")||AIDealer.equals("ye")||AIDealer.equals("y"))
-            {
-                humanDealer = false;
-                cont = false;
-            }
-            else if(AIDealer.equals("no")||AIDealer.equals("nah")||AIDealer.equals("n"))
-            {
-                humanDealer = true;
-                cont = false;
-            }
-            else
-            {
-                System.out.println("Please reply with yes or no");
-            }
-        }
+        boolean humanDealer = !ui.askYesNo("Do you want an Robot Dealer?");
+        
 
         
         int i;
@@ -87,10 +59,7 @@ public class BlackJack {
         {
             if(i==0&& humanDealer) // Initializing the Dealer First
             {
-                System.out.println("Dealer, please enter your name");
-                name = reader.readLine();
-                if(name.isEmpty())
-                    name = "Dealer";
+                name = ui.askString("Dealer, please enter your name");
                 Players.add(new Player(name,true));
                 Players.get(i).deal(2,deck,1);
                 System.out.println(name+"'s Cards");
